@@ -1,0 +1,19 @@
+workflows:
+  build_ios:
+    name: Build iOS from shape directory
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: |
+          cd shape
+          flutter pub get
+      - name: Build iOS app
+        script: |
+          cd shape
+          flutter build ios --release --no-codesign
+    artifacts:
+      - shape/build/ios/ipa/*.ipa
