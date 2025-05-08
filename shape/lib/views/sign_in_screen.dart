@@ -3,16 +3,22 @@ import '../controller/user_controller.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  SignInScreenState createState() => SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class SignInScreenState extends State<SignInScreen> {
   final _nameController = TextEditingController();
   final _nickController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _cPasswordController = TextEditingController();
-final _userController = UserController();
+  final _userController = UserController();
+
+  FocusNode _nameFocusNode = FocusNode();
+  FocusNode _nickFocusNode = FocusNode();
+  FocusNode _emailFocusNode = FocusNode();
+  FocusNode _passwordFocusNode = FocusNode();
+  FocusNode _cPasswordFocusNode = FocusNode();
 
   String? selectedStage;
 
@@ -24,48 +30,84 @@ final _userController = UserController();
   ];
 
   @override
+  void dispose() {
+    _nameFocusNode.dispose();
+    _nickFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _cPasswordFocusNode.dispose();
+    super.dispose();
+  }
+
+  InputDecoration inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.white70),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.white38),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.white),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        leading: BackButton(),
-        title: Text("Registro"),
+        backgroundColor: Colors.black,
+        leading: BackButton(color: Colors.white),
+        title: Text("Registro", style: TextStyle(color: Colors.white)),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             TextField(
+              focusNode: _nameFocusNode,
               controller: _nameController,
-              decoration: InputDecoration(labelText: "Nombre"),
+              style: TextStyle(color: Colors.white),
+              decoration: inputDecoration("Nombre"),
             ),
             TextField(
+              focusNode: _nickFocusNode,
               controller: _nickController,
-              decoration: InputDecoration(labelText: "Nick"),
+              style: TextStyle(color: Colors.white),
+              decoration: inputDecoration("Nick"),
             ),
             TextField(
+              focusNode: _emailFocusNode,
               controller: _emailController,
-              decoration: InputDecoration(labelText: "Email"),
+              style: TextStyle(color: Colors.white),
+              decoration: inputDecoration("Email"),
               keyboardType: TextInputType.emailAddress,
             ),
             TextField(
+              focusNode: _passwordFocusNode,
               controller: _passwordController,
-              decoration: InputDecoration(labelText: "Contraseña"),
+              style: TextStyle(color: Colors.white),
+              decoration: inputDecoration("Contraseña"),
               obscureText: true,
             ),
             TextField(
+              focusNode: _cPasswordFocusNode,
               controller: _cPasswordController,
-              decoration: InputDecoration(labelText: "Confirmar Contraseña"),
+              style: TextStyle(color: Colors.white),
+              decoration: inputDecoration("Confirmar Contraseña"),
               obscureText: true,
             ),
             SizedBox(height: 16),
             DropdownButton<String>(
+              dropdownColor: Colors.black,
               value: selectedStage,
               isExpanded: true,
-              hint: Text("¿En qué etapa estás?"),
+              hint: Text("¿En qué etapa estás?", style: TextStyle(color: Colors.white70)),
               items: stages.map((String stage) {
                 return DropdownMenuItem<String>(
                   value: stage,
-                  child: Text(stage),
+                  child: Text(stage, style: TextStyle(color: Colors.white)),
                 );
               }).toList(),
               onChanged: (value) {
@@ -76,7 +118,15 @@ final _userController = UserController();
             ),
             SizedBox(height: 24),
             ElevatedButton(
-              child: Text("Registrarse"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text("Registrarse", style: TextStyle(fontSize: 16)),
               onPressed: () {
                 final name = _nameController.text.trim();
                 final nick = _nickController.text.trim();
